@@ -1,6 +1,7 @@
 // Accessing the Service that we just created
 
 var CrisisService = require('../services/crisis.service');
+var AuthService = require('../services/auth.service');
 
 // Saving the context of this module inside the _the variable
 
@@ -11,6 +12,13 @@ _this = this;
 
 exports.createCrisis = async function (req, res, next) {
     // Req.Body contains the form submit values.
+
+    if(!req.body.accessToken || AuthService.verifyUser(accessToken)){
+        return res.status(400).json({
+            status: 401,
+            message: "Unauthorized"
+        });
+    }
 
     var crisis = {
         caseId: req.body.caseId,
@@ -49,9 +57,16 @@ exports.createCrisis = async function (req, res, next) {
 }
 
 exports.approveAction = async function (req, res, next) {
+    if(!req.body.accessToken || AuthService.verifyUser(accessToken)){
+        return res.status(400).json({
+            status: 401,
+            message: "Unauthorized"
+        });
+    }
+
     if (!req.params.id) {
         return res.status(400).json({
-            status: 400.,
+            status: 400,
             message: "Id must be present"
         });
     }
@@ -78,6 +93,13 @@ exports.approveAction = async function (req, res, next) {
 }
 
 exports.rejectAction = async function (req, res, next) {
+    if(!req.body.accessToken || AuthService.verifyUser(accessToken)){
+        return res.status(400).json({
+            status: 401,
+            message: "Unauthorized"
+        });
+    }
+
     if (!req.params.id) {
         return res.status(400).json({
             status: 400.,
@@ -107,6 +129,13 @@ exports.rejectAction = async function (req, res, next) {
 }
 
 exports.siteUpdate = async function (req, res, next) {
+    if(!req.body.accessToken || AuthService.verifyUser(accessToken)){
+        return res.status(400).json({
+            status: 401,
+            message: "Unauthorized"
+        });
+    }
+
     if (!req.params.id) {
         return res.status(400).json({
             status: 400.,
@@ -142,6 +171,13 @@ exports.siteUpdate = async function (req, res, next) {
 }
 
 exports.closeCrisis = async function (req, res, next) {
+    if(!req.body.accessToken || AuthService.verifyUser(accessToken)){
+        return res.status(400).json({
+            status: 401,
+            message: "Unauthorized"
+        });
+    }
+
     if (!req.params.id) {
         return res.status(400).json({
             status: 400.,
